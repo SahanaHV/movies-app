@@ -1,0 +1,15 @@
+$primary: #2f87c2;
+$success: #1f725d;
+$danger: #b3342d;
+
+$theme-colors:(
+    "primary":$primary,
+    "success":$success,
+    "danger":$danger
+);
+
+@import '~bootstrap/scss/bootstrap.scss';
+
+.movie-card{
+    width: 200px;
+}

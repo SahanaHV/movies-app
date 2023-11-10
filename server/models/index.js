@@ -1,0 +1,40 @@
+'use strict';
+
+const fs = require('fs');
+const path = require('path');
+const Sequelize = require('sequelize');
+const basename = path.basename(__filename);
+const db = {};
+
+// create instance of sequelize attaching to global variable called db
+let sequelize;
+// console.log(process.env.PG_URI);
+if (process.env.PG_URI) {
+    sequelize = new Sequelize(process.env.PG_URI);
+}
+
+fs.readdirSync(__dirname)
+    .filter(file => {
+        return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
+    })
+    .forEach(file => {
+        const model = require(path.join(__dirname, file))(sequelize, Sequelize.DataTypes);
+        db[model.name] = model;
+    });
+
+    // cascading for nesting
+Object.keys(db).forEach(modelName => {
+    if (db[modelName].associate) {
+        db[modelName].associate(db);
+    }
+});
+
+// db object, empty object
+// console.log(db);
+
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+
+module.exports = db;
+
